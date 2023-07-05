@@ -1,0 +1,168 @@
+<div>
+    <h3>Create Train</h3>
+    <form [formGroup]="trainForm" (ngSubmit)="createTrain()">
+      <div>
+        <label for="number">Number:</label>
+        <input type="number" id="number" formControlName="number">
+        <div *ngIf="trainForm.get('number')?.invalid && (trainForm.get('number')?.dirty || trainForm.get('number')?.touched)">
+          <div *ngIf="trainForm.get('number')?.hasError('required')">Number is required.</div>
+        </div>
+      </div>
+      <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" formControlName="name">
+        <div *ngIf="trainForm.get('name')?.invalid && (trainForm.get('name')?.dirty || trainForm.get('name')?.touched)">
+          <div *ngIf="trainForm.get('name')?.hasError('required')">Name is required.</div>
+          <div *ngIf="trainForm.get('name')?.hasError('minlength')">Name should be at least 3 characters long.</div>
+          <div *ngIf="trainForm.get('name')?.hasError('maxlength')">Name cannot exceed 100 characters.</div>
+        </div>
+      </div>
+      <div>
+        <label for="departureStation">Departure Station:</label>
+        <input type="text" id="departureStation" formControlName="departureStation">
+        <div *ngIf="trainForm.get('departureStation')?.invalid && (trainForm.get('departureStation')?.dirty || trainForm.get('departureStation')?.touched)">
+          <div *ngIf="trainForm.get('departureStation')?.hasError('required')">Departure Station is required.</div>
+        </div>
+      </div>
+      <div>
+        <label for="departureTime">Departure Time:</label>
+        <input type="text" id="departureTime" formControlName="departureTime">
+        <div *ngIf="trainForm.get('departureTime')?.invalid && (trainForm.get('departureTime')?.dirty || trainForm.get('departureTime')?.touched)">
+          <div *ngIf="trainForm.get('departureTime')?.hasError('required')">Departure Time is required.</div>
+        </div>
+      </div>
+      <div>
+        <label for="arrivalStation">Arrival Station:</label>
+        <input type="text" id="arrivalStation" formControlName="arrivalStation">
+        <div *ngIf="trainForm.get('arrivalStation')?.invalid && (trainForm.get('arrivalStation')?.dirty || trainForm.get('arrivalStation')?.touched)">
+          <div *ngIf="trainForm.get('arrivalStation')?.hasError('required')">Arrival Station is required.</div>
+        </div>
+      </div>
+      <div>
+        <label for="arrivalTime">Arrival Time:</label>
+        <input type="text" id="arrivalTime" formControlName="arrivalTime">
+        <div *ngIf="trainForm.get('arrivalTime')?.invalid && (trainForm.get('arrivalTime')?.dirty || trainForm.get('arrivalTime')?.touched)">
+          <div *ngIf="trainForm.get('arrivalTime')?.hasError('required')">Arrival Time is required.</div>
+        </div>
+      </div>
+      <div>
+        <label for="duration">Duration:</label>
+        <input type="text" id="duration" formControlName="duration">
+        <div *ngIf="trainForm.get('duration')?.invalid && (trainForm.get('duration')?.dirty || trainForm.get('duration')?.touched)">
+          <div *ngIf="trainForm.get('duration')?.hasError('required')">Duration is required.</div>
+        </div>
+      </div>
+      <div>
+        <label for="distance">Distance (In Kms):</label>
+        <input type="number" id="distance" formControlName="distance">
+        <div *ngIf="trainForm.get('distance')?.invalid && (trainForm.get('distance')?.dirty || trainForm.get('distance')?.touched)">
+          <div *ngIf="trainForm.get('distance')?.hasError('required')">Distance is required.</div>
+        </div>
+      </div>
+      <div>
+        <label for="fare">Fare:</label>
+        <input type="number" id="fare" formControlName="fare">
+      </div>
+      <div>
+        <label for="seatsAvailable">Seats Available:</label>
+        <input type="number" id="seatsAvailable" formControlName="seatsAvailable">
+      </div>
+     
+      <button type="submit"  *ngIf="showAdd" [disabled]="trainForm.invalid">Create</button>
+      <button type="submit" (click)="updateTrain(trainForm.value)" *ngIf="showUpdate" class="update-button">Update</button>
+  
+    </form>
+
+
+    <div>
+      <h3>Train List</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Number</th>
+            <th>Name</th>
+            <th>Departure Station</th>
+            <th>Departure Time</th>
+            <th>Arrival Station</th>
+            <th>Arrival Time</th>
+            <th>Duration</th>
+            <th>Distance</th>
+            <th>Fare</th>
+            <th>Seats Available</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let train of trains">
+            <td>{{ train.number }}</td>
+            <td>{{ train.name }}</td>
+            <td>{{ train.departureStation }}</td>
+            <td>{{ train.departureTime }}</td>
+            <td>{{ train.arrivalStation }}</td>
+            <td>{{ train.arrivalTime }}</td>
+            <td>{{ train.duration }}</td>
+            <td>{{ train.distance }}</td>
+            <td>{{ train.fare }}</td>
+            <td>{{ train.seatsAvailable }}</td>
+            <td>
+              <button type="button" (click)="editTrain(train)">Edit</button>
+              <button type="button" (click)="deleteTrain(train.id)">Delete</button>
+              <!-- <button type="button" (click)="deleteTrain(train.number)">Delete</button> -->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+  
+  <div>
+
+
+    <div class="container">
+      <h3>Search Train</h3>        
+            
+      <form [formGroup]="searchByNumberForm">
+        <div class="form-group">
+          <label for="searchByNumber">Search By Number</label>
+          <input type="number" formControlName="number" class="form-control" id="searchByNumber" required>
+        </div>
+        <button type="button" class="btn btn-primary" (click)="searchByNumber()">Search</button>
+      </form>
+    
+    <hr>
+    
+      <form [formGroup]="searchByNameForm">
+        <div class="form-group">
+          <label for="searchByName">Search By Name</label>
+          <input type="text" formControlName="name" class="form-control" id="searchByName" required>
+        </div>
+        <button type="button" class="btn btn-primary" (click)="searchByName()">Search</button>
+      </form>
+    <hr>
+    <form [formGroup]="searchBySeatsAvalForm">
+      <div class="form-group">
+        <label for="searchBySeatesAval">Search By SeatsAvailable</label>
+        <input type="text" formControlName="seats" class="form-control" id="searchBySeatesAval" required>
+      </div>
+      <button type="button" class="btn btn-primary" (click)="searchBySeatsAvailable()">Search</button>
+    </form>
+
+      <div *ngIf="searchResult.length > 0">
+        <h2>Search Results:</h2>
+        <ul>
+          <li *ngFor="let result of searchResult">
+            <p>Number: {{ result.number }}</p>
+            <p>Name: {{ result.name }}</p>   
+          </li>
+        </ul>
+      </div> 
+
+      <div *ngIf="searchResultObj">
+        <h2>Search Results:</h2>
+        <p>Number: {{ searchResultObj.number }}</p>
+        <p>Name: {{ searchResultObj.name }}</p> 
+      </div>       
+
+    </div>
+
